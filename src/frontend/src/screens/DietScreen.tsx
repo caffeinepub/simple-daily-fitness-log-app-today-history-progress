@@ -9,6 +9,7 @@ import DietEditDialog from '../components/DietEditDialog';
 import SkipDayToggle from '../components/SkipDayToggle';
 import WaterGlassesTracker from '../components/WaterGlassesTracker';
 import ProteinScoopsTracker from '../components/ProteinScoopsTracker';
+import WaterReminderSettings from '../components/WaterReminderSettings';
 import { useGetDietForDate } from '../hooks/useDietOverrides';
 import { useGetDietSkippedForDate, useToggleDietSkippedForDate } from '../hooks/queries/useDietSkip';
 import { useInternetIdentity } from '../hooks/useInternetIdentity';
@@ -73,6 +74,8 @@ export default function DietScreen() {
         <WaterGlassesTracker date={selectedDate} />
         <ProteinScoopsTracker date={selectedDate} />
       </div>
+
+      <WaterReminderSettings />
 
       {isLoading ? (
         <div className="space-y-4">

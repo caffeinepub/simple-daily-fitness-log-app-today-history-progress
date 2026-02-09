@@ -8,12 +8,13 @@ interface AppShellProps {
   children: ReactNode;
   activeTab: Tab;
   onTabChange: (tab: Tab) => void;
+  onShowTour: () => void;
 }
 
-export default function AppShell({ children, activeTab, onTabChange }: AppShellProps) {
+export default function AppShell({ children, activeTab, onTabChange, onShowTour }: AppShellProps) {
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <AppHeader />
+      <AppHeader onShowTour={onShowTour} />
       <main className="flex-1 overflow-y-auto pb-20">
         <div className="mx-auto max-w-2xl px-4 py-6 safe-bottom">
           {children}

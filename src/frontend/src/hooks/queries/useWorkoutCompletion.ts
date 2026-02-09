@@ -80,3 +80,17 @@ export function useToggleWorkoutCompletionForDate() {
     },
   });
 }
+
+// Date range completion hook
+export function useGetWorkoutCompletionsForDateRange(startDate: string, endDate: string) {
+  const { actor, isFetching: actorFetching } = useActor();
+
+  return useQuery<Array<[string, boolean]>>({
+    queryKey: queryKeys.workoutCompletionsRange(startDate, endDate),
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getWorkoutCompletionsForDateRange(startDate, endDate);
+    },
+    enabled: !!actor && !actorFetching,
+  });
+}

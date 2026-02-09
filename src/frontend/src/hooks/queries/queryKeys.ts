@@ -5,6 +5,7 @@ export const queryKeys = {
   weightEntries: ['weightEntries'] as const,
   latestWeight: ['latestWeight'] as const,
   workoutCompletion: (date: string) => ['workoutCompletion', date] as const,
+  workoutCompletionsRange: (startDate: string, endDate: string) => ['workoutCompletionsRange', startDate, endDate] as const,
   workoutForDate: (date: string) => ['workoutForDate', date] as const,
   dietForDate: (date: string) => ['dietForDate', date] as const,
   workoutSkipped: (date: string) => ['workoutSkipped', date] as const,

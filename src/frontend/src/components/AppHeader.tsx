@@ -1,9 +1,20 @@
-import { Scale } from 'lucide-react';
+import { Scale, HelpCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import AuthButton from './AuthButton';
 import ThemeToggle from './ThemeToggle';
 import { useGetCallerUserProfile } from '../hooks/queries/useCurrentUserProfile';
 
-export default function AppHeader() {
+interface AppHeaderProps {
+  onShowTour: () => void;
+}
+
+export default function AppHeader({ onShowTour }: AppHeaderProps) {
   const { data: profile } = useGetCallerUserProfile();
 
   return (
@@ -21,6 +32,23 @@ export default function AppHeader() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={onShowTour}
+                  aria-label="Show app tour"
+                >
+                  <HelpCircle className="h-5 w-5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Show app tour</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <ThemeToggle />
           <AuthButton />
         </div>

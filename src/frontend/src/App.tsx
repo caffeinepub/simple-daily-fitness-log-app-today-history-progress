@@ -8,7 +8,9 @@ import WorkoutScreen from './screens/WorkoutScreen';
 import DietScreen from './screens/DietScreen';
 import ProgressScreen from './screens/ProgressScreen';
 import ProfileSetupDialog from './components/ProfileSetupDialog';
+import OnboardingTourDialog from './components/OnboardingTourDialog';
 import ErrorBoundary from './components/ErrorBoundary';
+import { useOnboardingTour } from './hooks/useOnboardingTour';
 
 type Tab = 'home' | 'workout' | 'diet' | 'progress';
 
@@ -16,12 +18,14 @@ const queryClient = new QueryClient();
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState<Tab>('home');
+  const { isOpen, dismiss, close, reset } = useOnboardingTour();
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <ErrorBoundary>
         <ProfileSetupDialog />
-        <AppShell activeTab={activeTab} onTabChange={setActiveTab}>
+        <OnboardingTourDialog open={isOpen} onDismiss={dismiss} onClose={close} />
+        <AppShell activeTab={activeTab} onTabChange={setActiveTab} onShowTour={reset}>
           {activeTab === 'home' && <HomeScreen />}
           {activeTab === 'workout' && <WorkoutScreen />}
           {activeTab === 'diet' && <DietScreen />}

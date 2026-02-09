@@ -1,73 +1,86 @@
 {
   "kind": "build_request",
-  "title": "Add per-day water glasses tracker and protein scoops tracker",
+  "title": "Add a progress graph chart for workout completion over time",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-26",
-      "text": "Add a per-date water intake tracker that lets the user record how many glasses of water they drank for the selected date (YYYY-MM-DD), with controls to increment/decrement and a visible total.",
+      "id": "REQ-1",
+      "text": "Add a new chart on the Progress screen to visualize workout progress over time (e.g., a simple bar/line chart showing completed vs not completed per day for the last 30 days), in addition to the existing Weight Progress chart.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-13"
         ],
         "quotes": [
-          "add how many glass of water I am drinking a day tracker"
+          "add a graph chart to show my progress"
         ]
       },
       "acceptanceCriteria": [
-        "On the Diet tab, when a user changes the selected date, the water tracker updates to show that date’s saved value.",
-        "User can increase and decrease the number of glasses with clear mobile-friendly controls.",
-        "The current day’s total is displayed as an integer count (e.g., \"Glasses: 5\").",
-        "The value persists across page reloads (localStorage)."
+        "Progress tab shows at least two sections/cards: one for Weight Progress (existing) and one for Workout Progress (new).",
+        "Workout Progress chart renders a 30-day timeline visualization using the existing app styling (Tailwind + shadcn Card).",
+        "When there is no workout completion data in the selected range, the Workout Progress chart area shows an empty state message in English (e.g., \"No workout progress yet. Complete a workout to start tracking!\").",
+        "All user-facing text added for this feature is in English."
       ]
     },
     {
-      "id": "REQ-27",
-      "text": "Add a per-date protein tracker that records completion of a daily goal of two scoops of protein for the selected date, with a clear 0/2, 1/2, 2/2 progress UI and quick controls to mark a scoop as completed or undo it.",
+      "id": "REQ-2",
+      "text": "Implement a frontend data hook to fetch workout completion status for a date range and use it to power the Workout Progress chart.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-13"
         ],
         "quotes": [
-          "two scoops of protein in diet daily"
+          "add a graph chart to show my progress"
         ]
       },
       "acceptanceCriteria": [
-        "On the Diet tab, the protein tracker shows progress for the selected date (0/2, 1/2, or 2/2).",
-        "User can toggle completion to reach exactly two scoops max, and can undo to reduce the count.",
-        "The value persists across page reloads (localStorage)."
+        "A React Query hook exists that loads workout completion data for a date range (start/end) and provides loading/empty/error states similar to other hooks in the app.",
+        "The Workout Progress chart uses this hook and displays a loading state while data is being fetched.",
+        "The hook uses centralized query keys (frontend/src/hooks/queries/queryKeys.ts) for caching/invalidations."
       ]
     },
     {
-      "id": "REQ-28",
-      "text": "Implement React Query cache keys and hooks for reading/updating the per-date water-glasses and protein-scoops tracker values, using localStorage storage keyed by (principal, date) when authenticated, and a stable anonymous fallback key when not authenticated.",
-      "target": "frontend",
+      "id": "REQ-3",
+      "text": "Fix/complete the backend date-range workout completion query so it returns real completion data for the authenticated caller between the provided startDate and endDate (inclusive) instead of hardcoded placeholder dates.",
+      "target": "backend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-13"
+        ],
+        "quotes": [
+          "add a graph chart to show my progress"
         ]
       },
       "acceptanceCriteria": [
-        "New query keys exist for water intake per date and protein scoops per date, similar in style to existing date-scoped keys in frontend/src/hooks/queries/queryKeys.ts.",
-        "Hooks provide: (1) a getter for a given date and (2) a mutation to update the value, and mutations invalidate the corresponding date-scoped queries.",
-        "When authenticated, storage is keyed by the authenticated principal + date; when not authenticated, values still persist locally using an anonymous key + date.",
-        "No changes are made to read-only (immutable) frontend paths listed in SYSTEM_CONTEXT."
+        "Calling the backend method for workout completions over a date range returns an array of (YYYY-MM-DD, Bool) pairs representing actual stored completion values for the caller for each day in the range.",
+        "The method enforces the same authorization rules as other workout completion queries (authenticated user required).",
+        "The returned array covers every day in the requested range in chronological order.",
+        "No existing weight entry behavior is changed."
       ]
     }
   ],
   "constraints": [
-    "Keep all backend logic in the single Motoko actor (backend/main.mo) if any backend work is introduced later; do not introduce additional backend services.",
-    "Do not edit files under frontend/src/components/ui or any other immutable frontend paths listed in SYSTEM_CONTEXT."
+    "Backend must remain a single Motoko actor in backend/main.mo (no additional backend services).",
+    "Do not modify frontend immutable paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui."
   ],
   "nonGoals": [
-    "Do not change the existing water reminder behavior, scheduling, or notification text.",
-    "Do not require backend persistence for water/protein tracking in this iteration (local-first storage only).",
-    "Do not add new tabs or navigation items; integrate trackers into existing screens."
+    "Do not add third-party charting libraries (implement with existing React/SVG/Tailwind patterns).",
+    "Do not add real-time updates (no websockets/push).",
+    "Do not change authentication methods (Internet Identity only)."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

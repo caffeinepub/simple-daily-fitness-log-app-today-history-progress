@@ -141,7 +141,7 @@ export interface backendInterface {
     getWeightEntries(): Promise<Array<WeightEntry>>;
     getWorkoutCompletionCount(): Promise<bigint>;
     getWorkoutCompletionForDate(date: string): Promise<boolean>;
-    getWorkoutCompletionsForDateRange(_startDate: string, _endDate: string): Promise<Array<[string, boolean]>>;
+    getWorkoutCompletionsForDateRange(startDate: string, endDate: string): Promise<Array<[string, boolean]>>;
     getWorkoutForDate(date: string): Promise<WorkoutContent | null>;
     getWorkoutRecords(): Promise<Array<WorkoutCompletionRecord>>;
     getWorkoutStreak(): Promise<bigint>;

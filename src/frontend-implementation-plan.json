@@ -1,80 +1,53 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Per-date water glasses and protein scoops trackers (localStorage + React Query)",
+  "title": "Workout Progress chart on Progress screen (30-day completion timeline)",
   "requirements": [
     {
-      "id": "REQ-26",
-      "summary": "Add a per-date water glasses tracker on the Diet tab with increment/decrement controls and a visible total persisted in localStorage.",
+      "id": "REQ-1",
+      "summary": "Add a Workout Progress chart card to the Progress screen showing a 30-day completed vs not completed timeline, alongside the existing Weight Progress chart.",
       "acceptanceCriteria": [
-        "On the Diet tab, when a user changes the selected date, the water tracker updates to show that date’s saved value.",
-        "User can increase and decrease the number of glasses with clear mobile-friendly controls.",
-        "The current day’s total is displayed as an integer count (e.g., \"Glasses: 5\").",
-        "The value persists across page reloads (localStorage)."
+        "Progress tab shows at least two sections/cards: one for Weight Progress (existing) and one for Workout Progress (new).",
+        "Workout Progress chart renders a 30-day timeline visualization using the existing app styling (Tailwind + shadcn Card).",
+        "When there is no workout completion data in the selected range, the Workout Progress chart area shows an empty state message in English (e.g., \"No workout progress yet. Complete a workout to start tracking!\").",
+        "All user-facing text added for this feature is in English."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/WaterGlassesTracker.tsx",
+          "path": "frontend/src/components/WorkoutProgressChart.tsx",
           "operation": "create",
-          "description": "Create a Diet-tab tracker UI (Card-based) for water glasses that reads/writes the selected date’s value via the new React Query hooks (getter + mutation). Use existing shadcn/ui primitives (e.g., Card, Button) for mobile-friendly +/- controls and a clear integer total display. Verify the component's usage instructions before implementing."
+          "description": "Create a lightweight (no third-party library) SVG-based 30-day timeline chart component that takes date-indexed completion data and renders completed vs not completed per day using existing Tailwind styling conventions."
         },
         {
-          "path": "frontend/src/screens/DietScreen.tsx",
+          "path": "frontend/src/screens/ProgressScreen.tsx",
           "operation": "modify",
-          "description": "Wire the WaterGlassesTracker into the Diet tab layout and pass the current selectedDate so the tracker updates when the date changes; keep within existing screen (no new tabs/routes)."
+          "description": "Add a new shadcn Card section titled \"Workout Progress\" in addition to the existing \"Weight Progress\" card; compute the last-30-days range (inclusive) and render WorkoutProgressChart within an AsyncState-driven area that supports loading, error, and an empty state message in English when there are no completed workouts in the range."
         }
       ]
     },
     {
-      "id": "REQ-27",
-      "summary": "Add a per-date protein scoops tracker on the Diet tab with 0/2–2/2 progress UI and quick controls, persisted in localStorage.",
+      "id": "REQ-2",
+      "summary": "Implement a React Query hook that loads workout completion status for a start/end date range and use it to power the Workout Progress chart.",
       "acceptanceCriteria": [
-        "On the Diet tab, the protein tracker shows progress for the selected date (0/2, 1/2, or 2/2).",
-        "User can toggle completion to reach exactly two scoops max, and can undo to reduce the count.",
-        "The value persists across page reloads (localStorage)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/ProteinScoopsTracker.tsx",
-          "operation": "create",
-          "description": "Create a Diet-tab tracker UI (Card-based) for protein scoops showing explicit progress (0/2, 1/2, 2/2) with quick add/undo controls clamped to [0..2], backed by the new React Query hooks. Use existing shadcn/ui primitives for accessible tap targets. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/screens/DietScreen.tsx",
-          "operation": "modify",
-          "description": "Wire the ProteinScoopsTracker into the Diet tab layout and pass selectedDate; ensure it updates when the user navigates dates."
-        }
-      ]
-    },
-    {
-      "id": "REQ-28",
-      "summary": "Implement React Query query keys and hooks for per-date water glasses and protein scoops values using localStorage keyed by (principal, date) when authenticated and a stable anonymous fallback key otherwise.",
-      "acceptanceCriteria": [
-        "New query keys exist for water intake per date and protein scoops per date, similar in style to existing date-scoped keys in frontend/src/hooks/queries/queryKeys.ts.",
-        "Hooks provide: (1) a getter for a given date and (2) a mutation to update the value, and mutations invalidate the corresponding date-scoped queries.",
-        "When authenticated, storage is keyed by the authenticated principal + date; when not authenticated, values still persist locally using an anonymous key + date.",
-        "No changes are made to read-only (immutable) frontend paths listed in SYSTEM_CONTEXT."
+        "A React Query hook exists that loads workout completion data for a date range (start/end) and provides loading/empty/error states similar to other hooks in the app.",
+        "The Workout Progress chart uses this hook and displays a loading state while data is being fetched.",
+        "The hook uses centralized query keys (frontend/src/hooks/queries/queryKeys.ts) for caching/invalidations."
       ],
       "file_operations": [
         {
           "path": "frontend/src/hooks/queries/queryKeys.ts",
           "operation": "modify",
-          "description": "Add new date-scoped React Query keys for water glasses per date and protein scoops per date, matching existing key style and naming consistency."
+          "description": "Add a centralized React Query key generator for workout completions over a date range (start/end) to support caching and invalidation consistency with other hooks."
         },
         {
-          "path": "frontend/src/utils/trackerStorage.ts",
-          "operation": "create",
-          "description": "Add shared localStorage helpers to (a) derive a storage subject key from the authenticated principal when available and (b) create/reuse a stable anonymous subject key when not authenticated, plus helpers to read/write per-(subject,date) values for water glasses and protein scoops."
+          "path": "frontend/src/hooks/queries/useWorkoutCompletion.ts",
+          "operation": "modify",
+          "description": "Add a React Query hook (e.g., useGetWorkoutCompletionsForDateRange) that calls the backend actor’s getWorkoutCompletionsForDateRange(startDate, endDate) and exposes loading/error/data states consistent with existing query hooks (including actor availability gating)."
         },
         {
-          "path": "frontend/src/hooks/queries/useWaterGlasses.ts",
-          "operation": "create",
-          "description": "Implement React Query hooks for water glasses: a date-scoped getter hook and an update mutation hook that persists to localStorage via trackerStorage helpers and invalidates the corresponding date-scoped query key on success."
-        },
-        {
-          "path": "frontend/src/hooks/queries/useProteinScoops.ts",
-          "operation": "create",
-          "description": "Implement React Query hooks for protein scoops: a date-scoped getter hook and an update mutation hook that persists to localStorage via trackerStorage helpers (clamping to [0..2]) and invalidates the corresponding date-scoped query key on success."
+          "path": "frontend/src/screens/ProgressScreen.tsx",
+          "operation": "modify",
+          "description": "Wire the new date-range workout completion hook into the Workout Progress section so the chart uses the fetched data and shows AsyncState loading/error/empty states while data is being fetched or when no completion data exists."
         }
       ]
     }

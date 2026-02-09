@@ -12,8 +12,6 @@ import Iter "mo:core/Iter";
 import Float "mo:core/Float";
 import Int "mo:core/Int";
 
-
-
 actor {
   type WeightEntry = {
     timestamp : Time.Time;
@@ -344,23 +342,28 @@ actor {
     };
   };
 
-  public query ({ caller }) func getWorkoutCompletionsForDateRange(_startDate : Text, _endDate : Text) : async [(Text, Bool)] {
+  public query ({ caller }) func getWorkoutCompletionsForDateRange(startDate : Text, endDate : Text) : async [(Text, Bool)] {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can view workout completions");
     };
-    let rangeSize = 30;
-    let range = Array.tabulate(
-      rangeSize,
-      func(i) {
-        let date = "2023-07-" # (rangeSize - i).toText();
-        let key = makeCalendarKey(caller, date);
-        switch (calendarCompletions.get(key)) {
-          case (?completed) { (date, completed) };
-          case (null) { (date, false) };
+
+    let filteredEntries = calendarCompletions.entries().toArray().filter(
+      func((keyText, _)) {
+        switch (CalendarKey.fromText(keyText)) {
+          case (?key) {
+            key.principal.toText() == caller.toText() and key.date >= startDate and key.date <= endDate
+          };
+          case (null) { false };
         };
-      },
+      }
     );
-    range;
+
+    filteredEntries.map(func((keyText, isCompleted)) {
+      switch (CalendarKey.fromText(keyText)) {
+        case (?key) { (key.date, isCompleted) };
+        case (null) { ("", isCompleted) };
+      };
+    });
   };
 
   public shared ({ caller }) func saveCustomWorkoutForDate(date : Text, workout : WorkoutContent) : async () {
