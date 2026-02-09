@@ -1,0 +1,67 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-add-a-per-date-water-intake-tracker-that-lets-the-user-record-how-many-glasses-of-water-they-drank-for-the-selected-date-yyyy-mm-dd-with-controls-to-increment-decrement-and-a-visible-total",
+      "featureTitle": "Add a per-date water intake tracker that lets the user record how many glasses of water they drank for the selected date (YYYY-MM-DD), with controls to increment/decrement and a visible total.",
+      "files": [
+        "frontend/src/components/WaterGlassesTracker.tsx",
+        "frontend/src/screens/DietScreen.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-26"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-per-date-protein-tracker-that-records-completion-of-a-daily-goal-of-two-scoops-of-protein-for-the-selected-date-with-a-clear-0-2-1-2-2-2-progress-ui-and-quick-controls-to-mark-a-scoop-as-completed-or-undo-it",
+      "featureTitle": "Add a per-date protein tracker that records completion of a daily goal of two scoops of protein for the selected date, with a clear 0/2, 1/2, 2/2 progress UI and quick controls to mark a scoop as completed or undo it.",
+      "files": [
+        "frontend/src/components/ProteinScoopsTracker.tsx",
+        "frontend/src/screens/DietScreen.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-27"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-react-query-cache-keys-and-hooks-for-reading-updating-the-per-date-water-glasses-and-protein-scoops-tracker-values-using-localstorage-storage-keyed-by-principal-date-when-authenticated-and-a-stable-anonymous-fallback-key-when-not-authenticated",
+      "featureTitle": "Implement React Query cache keys and hooks for reading/updating the per-date water-glasses and protein-scoops tracker values, using localStorage storage keyed by (principal, date) when authenticated, and a stable anonymous fallback key when not authenticated.",
+      "files": [
+        "frontend/src/hooks/queries/queryKeys.ts",
+        "frontend/src/hooks/queries/useProteinScoops.ts",
+        "frontend/src/hooks/queries/useWaterGlasses.ts",
+        "frontend/src/utils/trackerStorage.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-28"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

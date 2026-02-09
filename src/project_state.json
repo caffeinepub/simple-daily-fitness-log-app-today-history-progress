@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Daily log app with added nutrition tracking needs (water intake and daily protein servings).",
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-add-a-per-date-water-intake-tracker-that-lets-the-user-record-how-many-glasses-of-water-they-drank-for-the-selected-date-yyyy-mm-dd-with-controls-to-increment-decrement-and-a-visible-total",
+      "title": "Add a per-date water intake tracker that lets the user record how many glasses of water they drank for the selected date (YYYY-MM-DD), with controls to increment/decrement and a visible total.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-per-date-protein-tracker-that-records-completion-of-a-daily-goal-of-two-scoops-of-protein-for-the-selected-date-with-a-clear-0-2-1-2-2-2-progress-ui-and-quick-controls-to-mark-a-scoop-as-completed-or-undo-it",
+      "title": "Add a per-date protein tracker that records completion of a daily goal of two scoops of protein for the selected date, with a clear 0/2, 1/2, 2/2 progress UI and quick controls to mark a scoop as completed or undo it.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-react-query-cache-keys-and-hooks-for-reading-updating-the-per-date-water-glasses-and-protein-scoops-tracker-values-using-localstorage-storage-keyed-by-principal-date-when-authenticated-and-a-stable-anonymous-fallback-key-when-not-authenticated",
+      "title": "Implement React Query cache keys and hooks for reading/updating the per-date water-glasses and protein-scoops tracker values, using localStorage storage keyed by (principal, date) when authenticated, and a stable anonymous fallback key when not authenticated.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Add a daily water intake tracker (number of glasses per day).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Add a daily protein intake tracker (track two scoops of protein per day).",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Add per-day water glasses tracker and protein scoops tracker",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

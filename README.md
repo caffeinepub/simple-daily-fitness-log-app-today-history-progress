@@ -1,2 +1,3 @@
-# simple-daily-fitness-log-app-today-history-progress
-Exported from Caffeine project: Add per-day water glasses tracker and protein scoops tracker
+## 
+
+To run app build and run docker image: `docker build -t app . docker run -it --network host app`

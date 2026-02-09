@@ -1,0 +1,14 @@
+export const queryKeys = {
+  profile: ['currentUserProfile'] as const,
+  workoutRecords: ['workoutRecords'] as const,
+  workoutStats: ['workoutStats'] as const,
+  weightEntries: ['weightEntries'] as const,
+  latestWeight: ['latestWeight'] as const,
+  workoutCompletion: (date: string) => ['workoutCompletion', date] as const,
+  workoutForDate: (date: string) => ['workoutForDate', date] as const,
+  dietForDate: (date: string) => ['dietForDate', date] as const,
+  workoutSkipped: (date: string) => ['workoutSkipped', date] as const,
+  dietSkipped: (date: string) => ['dietSkipped', date] as const,
+  waterGlasses: (date: string) => ['waterGlasses', date] as const,
+  proteinScoops: (date: string) => ['proteinScoops', date] as const,
+};

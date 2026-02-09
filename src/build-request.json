@@ -1,0 +1,73 @@
+{
+  "kind": "build_request",
+  "title": "Add per-day water glasses tracker and protein scoops tracker",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-26",
+      "text": "Add a per-date water intake tracker that lets the user record how many glasses of water they drank for the selected date (YYYY-MM-DD), with controls to increment/decrement and a visible total.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "add how many glass of water I am drinking a day tracker"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On the Diet tab, when a user changes the selected date, the water tracker updates to show that date’s saved value.",
+        "User can increase and decrease the number of glasses with clear mobile-friendly controls.",
+        "The current day’s total is displayed as an integer count (e.g., \"Glasses: 5\").",
+        "The value persists across page reloads (localStorage)."
+      ]
+    },
+    {
+      "id": "REQ-27",
+      "text": "Add a per-date protein tracker that records completion of a daily goal of two scoops of protein for the selected date, with a clear 0/2, 1/2, 2/2 progress UI and quick controls to mark a scoop as completed or undo it.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "two scoops of protein in diet daily"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On the Diet tab, the protein tracker shows progress for the selected date (0/2, 1/2, or 2/2).",
+        "User can toggle completion to reach exactly two scoops max, and can undo to reduce the count.",
+        "The value persists across page reloads (localStorage)."
+      ]
+    },
+    {
+      "id": "REQ-28",
+      "text": "Implement React Query cache keys and hooks for reading/updating the per-date water-glasses and protein-scoops tracker values, using localStorage storage keyed by (principal, date) when authenticated, and a stable anonymous fallback key when not authenticated.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ]
+      },
+      "acceptanceCriteria": [
+        "New query keys exist for water intake per date and protein scoops per date, similar in style to existing date-scoped keys in frontend/src/hooks/queries/queryKeys.ts.",
+        "Hooks provide: (1) a getter for a given date and (2) a mutation to update the value, and mutations invalidate the corresponding date-scoped queries.",
+        "When authenticated, storage is keyed by the authenticated principal + date; when not authenticated, values still persist locally using an anonymous key + date.",
+        "No changes are made to read-only (immutable) frontend paths listed in SYSTEM_CONTEXT."
+      ]
+    }
+  ],
+  "constraints": [
+    "Keep all backend logic in the single Motoko actor (backend/main.mo) if any backend work is introduced later; do not introduce additional backend services.",
+    "Do not edit files under frontend/src/components/ui or any other immutable frontend paths listed in SYSTEM_CONTEXT."
+  ],
+  "nonGoals": [
+    "Do not change the existing water reminder behavior, scheduling, or notification text.",
+    "Do not require backend persistence for water/protein tracking in this iteration (local-first storage only).",
+    "Do not add new tabs or navigation items; integrate trackers into existing screens."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

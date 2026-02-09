@@ -1,0 +1,20 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-08T17:53:28.795Z",
+  "summary": "Implemented per-date water glasses and protein scoops trackers on the Diet screen, backed by React Query hooks and localStorage persistence keyed by (principal-or-stable-anon-subject, date). Added query keys, storage helpers, and UI components with increment/decrement controls and date-scoped updates.",
+  "missing_requirements": [],
+  "hallucinated_features": [],
+  "confidence": 0.86,
+  "changed_files": [
+    "frontend-file-summaries.txt",
+    "frontend/src/components/ProteinScoopsTracker.tsx",
+    "frontend/src/components/WaterGlassesTracker.tsx",
+    "frontend/src/hooks/queries/queryKeys.ts",
+    "frontend/src/hooks/queries/useProteinScoops.ts",
+    "frontend/src/hooks/queries/useWaterGlasses.ts",
+    "frontend/src/screens/DietScreen.tsx",
+    "frontend/src/utils/trackerStorage.ts",
+    "project_state.json"
+  ]
+}
